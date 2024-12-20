@@ -35,7 +35,7 @@ The MedReport pipeline consists of three main stages:
 │   └── README.md         # Documentation for summarization
 └── requirements.txt      # Python dependencies
 ````
-----
+---
 
 ## Pipeline Stages
 1. Data Preprocessing
