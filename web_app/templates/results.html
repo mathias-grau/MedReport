@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Processing Results</title>
+</head>
+<body>
+    <h1>Report Extraction Results</h1>
+    
+    <h2>Raw Text</h2>
+    <pre>{{ raw_text }}</pre>
+    
+    <h2>Parsed Information</h2>
+    <pre>{{ parsed }}</pre>
+    
+    <!-- If summarization is implemented -->
+    {# <h2>Summarized Information</h2>
+    <pre>{{ summary }}</pre> #}
+
+    <br>
+    <a href="{{ url_for('upload_file') }}">Upload Another File</a>
+</body>
+</html>
