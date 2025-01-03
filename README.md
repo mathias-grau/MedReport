@@ -66,16 +66,21 @@ The MedReport pipeline consists of three main stages:
 
 To run the files, one should need an environement : 
 
-On mac : 
 ```bash
-source venv/bin/activate
-# deactivate
+python -m venv venv
 ```
 
-On Windows : 
+Then you will need to activate it :
+On mac : 
 ```bash
+# Linux / Mac
+source venv/bin/activate
+# deactivate # to deactivate the env
+
+
+# On Windows : 
 venv\Scripts\activate
-# venv\Scripts\deactivate
+# venv\Scripts\deactivate # to deactivate the env
 ```
 
 ---
