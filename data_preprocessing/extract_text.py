@@ -13,6 +13,6 @@ def extract_text_from_png(png_path):
     return "Simulated extracted text from png."
 
 
-#### Test the functions
-preprocessed_text = extract_text_from_pdf("../data/exemple.pdf")
-print(preprocessed_text)
+# #### Test the functions
+# preprocessed_text = extract_text_from_pdf("../data/exemple.pdf")
+# print(preprocessed_text)
