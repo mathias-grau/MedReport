@@ -34,17 +34,24 @@ def upload_file():
 
             # 1) Preprocess/Extract text
             raw_text = extract_text_from_pdf(file_path)
+            print("raw_text")
+            print(raw_text)
             
             # 2) Parse the text
             parsed_info = parse_raw_text(raw_text)
+            print("parsed_info")
+            print(parsed_info)
             
             # 3) Summarize the text (optional if you have the module)
-            # summary = summarize_data(parsed_info)
+            summary = summarize_data(parsed_info)
+            print("summary")
+            print(summary)
 
             # For demonstration, let's say we just store parsed_info
             return render_template('results.html',
                                    raw_text=raw_text,
-                                   parsed=parsed_info)
+                                   parsed=parsed_info,
+                                   summary=summary)
     return render_template('index.html')
 
 if __name__ == '__main__':
