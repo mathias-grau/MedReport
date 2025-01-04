@@ -91,6 +91,17 @@ Run :
 ```bash
 pip install -r requirements.txt
 ```
+---
+
+### Summarization
+
+To summarize the medical report, we use a pretraine model from [HuggingFace](https://huggingface.co/SumayyaAli/tiny-llama-1.1b-chat-medical) :
+Run the `load_model.py` file to download it (2.2Go) 
+
+```bash
+cd data_summarization
+python load_model.py
+```
 
 ---
 ### Webapp 
