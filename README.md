@@ -70,8 +70,7 @@ To run the files, one should need an environement :
 python -m venv venv
 ```
 
-Then you will need to activate it :
-On mac : 
+Then you will need to activate it : 
 ```bash
 # Linux / Mac
 source venv/bin/activate
