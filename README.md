@@ -106,6 +106,8 @@ python load_model.py
 ---
 ### Webapp 
 
+Warning : so that the app can run : comment all non-function lines in files `data_parsing/parse_text.py`, `data_preprocessing/extract_text.py` and `data_summarization/summarize.py`.
+
 
 ```bash
 python -m web_app.app
