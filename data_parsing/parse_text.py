@@ -8,17 +8,20 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForQuestionAnswering.from_pretrained(model_name)
 qa_pipeline = pipeline("question-answering", model=model, tokenizer=tokenizer)
 
-# Define the list of questions for structured fields
-questions = {
-    "Patient name": "What is the patient's name?",
-    "Patient age": "What is the patient's age?",
-    "Location": "What is the location of the tumor?",
-    "Distance from anal verge": "What is the distance of the tumor from the anal verge?",
-    "Tumor length": "What is the tumor length?",
-    "Mucinous": "Is the tumor mucinous?",
-    "T-stage": "What is the T-stage of the tumor?",
-    "Anal sphincter involvement": "Is there anal sphincter involvement?",
-}
+import os 
+print(os.getcwd())
+
+# Get the list of questions for structured fields
+with open('data_parsing/information.txt', 'r') as file:
+    questions = file.readlines()
+    questions = [line.strip() for line in questions]
+    questions_dict = {}
+    for question in questions:
+        key, value = question.split(':')
+        # remove the leading and trailing whitespaces
+        key = key.strip()
+        value = value.strip()
+        questions_dict[key] = value
 
 # Function to extract structured data
 def extract_structured_data(context, questions):
@@ -36,7 +39,7 @@ def extract_structured_data(context, questions):
 
 def parse_raw_text(raw_text: str) -> dict:
     # Extract structured data
-    return extract_structured_data(raw_text, questions)
+    return extract_structured_data(raw_text, questions_dict)
 
 
 # #### Test the functions
