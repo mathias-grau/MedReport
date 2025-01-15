@@ -27,6 +27,16 @@ Plusieurs niveau d’informations à extraire
 - Classification TNM pour statifier le cancer (propre à chaque type de cancer)
 Il faudrait réussir à faire quelque chose qui extrait ca et qui le met dans des données tabulaire
 
+The features can be modified directly in the file information.txt.
+To add a feature that will be parsed from the text, simply add a new line in this file of the form : 
+
+Feature name: Explaination of the features in the form of a question
+
+Example : 
+
+Patient name: What is the patient name ?
+Structure: In which structure is the tumor ? 
+
 ## Usage
 
 ### Example Workflow
