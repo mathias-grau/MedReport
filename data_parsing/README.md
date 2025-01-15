@@ -34,7 +34,7 @@ Feature name: Explaination of the features in the form of a question
 
 Example : 
 
-Patient name: What is the patient name ?
+Patient name: What is the patient name ? \n
 Structure: In which structure is the tumor ? 
 
 ## Usage
