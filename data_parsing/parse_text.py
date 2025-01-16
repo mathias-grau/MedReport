@@ -4,8 +4,9 @@ import torch
 
 # Load a BERT model and tokenizer
 model_name = "deepset/bert-base-cased-squad2"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForQuestionAnswering.from_pretrained(model_name)
+cache_dir = "./"  # Current directory
+tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
+model = AutoModelForQuestionAnswering.from_pretrained(model_name, cache_dir=cache_dir)
 qa_pipeline = pipeline("question-answering", model=model, tokenizer=tokenizer)
 
 import os 
