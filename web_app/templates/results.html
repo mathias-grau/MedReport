@@ -1,21 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Processing Results</title>
+    <title>Résultats du Traitement</title>
+    <!-- Lien vers le fichier CSS statique -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Report Extraction Results</h1>
+    <h1>Résultats de l'Extraction du Rapport</h1>
     
-    <h2>Raw Text</h2>
+    <h2>Texte Brut</h2>
     <pre>{{ raw_text }}</pre>
     
-    <h2>Parsed Information</h2>
-    <pre>{{ parsed }}</pre>
+    <h2>Informations Analysées</h2>
+    <!-- Afficher le dictionnaire analysé sous forme de tableau HTML -->
+    <table>
+        <thead>
+            <tr>
+                <th>Champ</th>
+                <th>Valeur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in parsed.items() %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     
-    <h2>Summarized Information</h2>
+    <h2>Informations Résumées</h2>
     <pre>{{ summary }}</pre>
 
     <br>
-    <a href="{{ url_for('upload_file') }}">Upload Another File</a>
+    <a href="{{ url_for('upload_file') }}">Télécharger un Autre Fichier</a>
 </body>
 </html>

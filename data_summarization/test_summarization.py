@@ -9,13 +9,8 @@ print("Preprocessing text...")
 raw_text = extract_text_from_pdf("./data/exemple.pdf")
 print("... text preprocessed successfully.")
 
-from summarize import summarize_data, questions_answers
+from summarize import summarize_data
 
-# Step 1: Summarize the medical report
+# Étape 1 : Créer un résumé du rapport médical
 summary = summarize_data(raw_text)
-print("Summary:", summary)
-
-# Step 2: Answer a patient's question based on the summarized report
-patient_question = "What treatment was provided to the patient?"
-answer = questions_answers(patient_question, summary)
-print("Answer:", answer)
+print("Résumé : ", summary)

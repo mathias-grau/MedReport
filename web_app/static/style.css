@@ -1,0 +1,107 @@
+/* Import a nice Google Font (optional) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap');
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #f9f9f9;
+    color: #333;
+}
+
+/* Center content and give some spacing */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Headings */
+h1 {
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+    color: #444;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+    color: #555;
+}
+
+/* Form container */
+form {
+    display: inline-block;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+/* File input */
+input[type="file"] {
+    display: block;
+    margin: 1rem 0;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    padding: 0.2rem;
+}
+
+/* Upload button */
+button[type="submit"] {
+    background-color: #009688;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #007a6c;
+}
+
+/* Preformatted text boxes (for raw text, parsed, summary) */
+pre {
+    background: #f0f0f0;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+/* Links (e.g., "Upload Another File") */
+a {
+    color: #009688;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #007a6c;
+}
+
+/* Additional utility classes (optional) */
+.centered {
+    text-align: center;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+.mb-2 {
+    margin-bottom: 2rem;
+}
+pre {
+    white-space: pre-wrap;      /* Wrap white space when needed */
+    word-wrap: break-word;      /* Break long words onto a new line */
+    overflow-wrap: break-word;  /* For full support across browsers */
+}
