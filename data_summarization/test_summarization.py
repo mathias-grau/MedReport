@@ -6,13 +6,16 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from data_preprocessing.extract_text import extract_text_from_pdf
 
 print("Preprocessing text...")
-preprocessed_text = extract_text_from_pdf("./data/exemple.pdf")
+raw_text = extract_text_from_pdf("./data/exemple.pdf")
 print("... text preprocessed successfully.")
 
-from summarize import summarize_data
+from summarize import summarize_data, questions_answers
 
-print("Summarizing data...")
-summarized_data = summarize_data(preprocessed_text)
-print("... data summarized successfully.")
+# Step 1: Summarize the medical report
+summary = summarize_data(raw_text)
+print("Summary:", summary)
 
-print(summarized_data)
+# Step 2: Answer a patient's question based on the summarized report
+patient_question = "What treatment was provided to the patient?"
+answer = questions_answers(patient_question, summary)
+print("Answer:", answer)
