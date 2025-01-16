@@ -1,39 +1,45 @@
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
+import torch
+from transformers import (
+    AutoModelForSeq2SeqLM,
+    AutoTokenizer,
+    pipeline
+)
 
-# Specify the cache directory
+device = "cuda" if torch.cuda.is_available() else "cpu"
 cache_dir = "./"
-# Example: FLAN-T5
 model_name = "google/flan-t5-large"
 
-# Download and save model to cache_dir
-model = AutoModelForSeq2SeqLM.from_pretrained(model_name, cache_dir=cache_dir)
+# Load model and tokenizer
+model = AutoModelForSeq2SeqLM.from_pretrained(model_name, cache_dir=cache_dir).to(device)
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
 
-# Initialize summarization pipeline
-summarizer = pipeline("summarization", model=model, tokenizer=tokenizer)
+# Create summarization pipeline
+summarizer = pipeline(
+    "summarization",
+    model=model,
+    tokenizer=tokenizer,
+    device=0 if device == "cuda" else -1,  # -1 = CPU, 0 = GPU
+)
 
-# Initialize question-answering pipeline
-qa_pipeline = pipeline("question-answering", model=model, tokenizer=tokenizer)
+def summarize_data(raw_text, min_length=30, max_length=100, do_sample=False):
+    """
+    Summarize the raw text from a medical report into simpler terms for a patient.
 
-# data_summarization/summarize.py
-def summarize_data(raw_text) -> str:
-    """
-    Create a simple summary by stitching together the parsed information
-    in plain language.
-    """
-    summary = summarizer(raw_text, max_length=100, min_length=5, do_sample=False)
-    return summary[0]["summary_text"]
-
-def questions_answers(patient_question, context) -> str:
-    """
-    Answer patient questions based on the summarized medical report.
-    
     Args:
-        patient_question (str): The question asked by the patient.
-        context (str): The summarized medical report to use as context.
-    
+        raw_text (str): The medical report text to summarize.
+        min_length (int): Minimum length of the summary.
+        max_length (int): Maximum length of the summary.
+        do_sample (bool): Whether to use sampling; False for deterministic output.
+
     Returns:
-        str: The answer to the patient's question.
+        str: A summarized version of the input text.
     """
-    answer = qa_pipeline(question=patient_question, context=context)
-    return answer["answer"]
+    # Run the text through the summarizer
+    summary = summarizer(
+        raw_text,
+        min_length=min_length,
+        max_length=max_length,
+        do_sample=do_sample
+    )
+    # The pipeline returns a list of dicts with the key 'summary_text'
+    return summary[0]['summary_text']

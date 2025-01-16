@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Medical Report Uploader</title>
+    <title>Uploader de Rapport Médical</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Upload a Medical Report (PDF or Image)</h1>
+    <h1>Téléversez un Rapport Médical (PDF ou Image)</h1>
     <form method="POST" action="/" enctype="multipart/form-data">
         <input type="file" name="file" accept=".pdf, .png, .jpg, .jpeg" />
-        <button type="submit">Upload</button>
+        <button type="submit">Téléverser</button>
     </form>
 </body>
 </html>

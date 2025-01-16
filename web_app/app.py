@@ -43,7 +43,7 @@ def upload_file():
             print(parsed_info)
             
             # 3) Summarize the text (optional if you have the module)
-            summary = summarize_data(parsed_info)
+            summary = summarize_data(raw_text)
             print("summary")
             print(summary)
 
