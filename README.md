@@ -33,6 +33,7 @@ The MedReport pipeline consists of three main stages:
 │   └── parse_text.py     # Code to parse key entities from raw text
 ├── data_summarization/   # Handles text summarization
 │   └── README.md         # Documentation for summarization
+│   └── summarize.py      # Code to summarize the text in the PDF file
 └── requirements.txt      # Python dependencies
 └── web_app/
     ├── app.py             # The Flask application
