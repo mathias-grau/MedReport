@@ -1,8 +1,0 @@
-Patient name: What is the patient's name?
-Patient age: What is the patient's age?
-Location: What is the location of the tumor?,
-Distance from anal verge: What is the distance of the tumor from the anal verge?
-Tumor length: What is the tumor length?
-Mucinous: Is the tumor mucinous?
-T-stage: What is the T-stage of the tumor?
-Anal sphincter involvement: Is there anal sphincter involvement?
