@@ -6,10 +6,10 @@ import re
 model_name = "deepset/bert-base-cased-squad2"
 # If we want a French model
 # model_name = "etalab-ia/camembert-base-squadFR-fquad-piaf"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
 # We use this tokenizer for the French model (for the English model, use "deepset/bert-base-cased-squad2")
 tokenizer_name = "camembert-base"
-model = AutoModelForQuestionAnswering.from_pretrained(tokenizer_name)
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+model = AutoModelForQuestionAnswering.from_pretrained(model_name)
 qa_pipeline = pipeline("question-answering", model=model, tokenizer=tokenizer)
 
 # Get the list of questions for structured fields
