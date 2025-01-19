@@ -98,11 +98,8 @@ dmypy.json
 .pyre/
 
 # Ignore the data_summarization/models--SumayyaAli--tiny-llama-1.1b-chat-medical folder
-data_summarization/models--SumayyaAli--tiny-llama-1.1b-chat-medical/
-
-# Ignore the .locks/models--deepset--bert-base-cased-squad2 folder
-.locks/models--deepset--bert-base-cased-squad2/
+.locks
 models--deepset--bert-base-cased-squad2/
-
-# Ignore google model 
 models--google--flan-t5-large
+models--etalab-ia--camembert-base-squadFR-fquad-piaf
+models--camembert-base
