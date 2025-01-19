@@ -35,6 +35,8 @@ def summarize_data(raw_text, min_length=30, max_length=100, do_sample=False):
         str: A summarized version of the input text.
     """
     # Run the text through the summarizer
+    assert isinstance(raw_text, str), "Input to summarizer must be a string."
+
     summary = summarizer(
         raw_text,
         min_length=min_length,
