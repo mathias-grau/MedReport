@@ -104,3 +104,6 @@ models--google--flan-t5-large
 models--etalab-ia--camembert-base-squadFR-fquad-piaf
 models--camembert-base
 models--facebook--bart-large-cnn
+
+# folders 
+uploads/
