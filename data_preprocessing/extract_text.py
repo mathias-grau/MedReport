@@ -17,7 +17,6 @@ def extract_text(file_path):
     elif file_path.endswith('.png') or file_path.endswith('.jpg') or file_path.endswith('.jpeg'):
         image = Image.open(file_path)
         text = pytesseract.image_to_string(image)
-        print(text)
         return text
 
     # If text file then read it:
