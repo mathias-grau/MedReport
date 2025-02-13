@@ -4,44 +4,56 @@ from transformers import (
     AutoTokenizer,
     pipeline
 )
+from config import Config
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-cache_dir = "./"
-model_name = "google/flan-t5-large"
+_summarizer_pipeline = None
 
-# Load model and tokenizer
-model = AutoModelForSeq2SeqLM.from_pretrained(model_name, cache_dir=cache_dir).to(device)
-tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
-
-# Create summarization pipeline
-summarizer = pipeline(
-    "summarization",
-    model=model,
-    tokenizer=tokenizer,
-    device=0 if device == "cuda" else -1,  # -1 = CPU, 0 = GPU
-)
-
-def summarize_data(raw_text, min_length=30, max_length=100, do_sample=False):
+def get_summarizer_pipeline():
     """
-    Summarize the raw text from a medical report into simpler terms for a patient.
-
-    Args:
-        raw_text (str): The medical report text to summarize.
-        min_length (int): Minimum length of the summary.
-        max_length (int): Maximum length of the summary.
-        do_sample (bool): Whether to use sampling; False for deterministic output.
-
-    Returns:
-        str: A summarized version of the input text.
+    Lazily load the summarization model/pipeline only once (singleton pattern).
     """
-    # Run the text through the summarizer
-    assert isinstance(raw_text, str), "Input to summarizer must be a string."
+    global _summarizer_pipeline
+    if _summarizer_pipeline is None:
+        print("Loading Summarization model into memory...")
+        tokenizer = AutoTokenizer.from_pretrained(
+            Config.SUMMARIZATION_MODEL_NAME,
+            cache_dir='./'
+        )
+        model = AutoModelForSeq2SeqLM.from_pretrained(
+            Config.SUMMARIZATION_MODEL_NAME,
+            cache_dir='./'
+        ).to(Config.DEVICE)
+        _summarizer_pipeline = pipeline(
+            "summarization",
+            model=model,
+            tokenizer=tokenizer,
+            device=0 if Config.DEVICE == "cuda" else -1
+        )
+    return _summarizer_pipeline
+
+def summarize_data(raw_text, min_length=30, max_length=100, do_sample=False, num_beams=4):
+    """
+    Summarize the raw text (in French) using facebook/bart-large-cnn.
+    NOTE: The BART CNN model is primarily trained on English data,
+    so results for French might not be perfect.
+
+    :param raw_text: The French text you want summarized.
+    :param min_length: The minimum length of the summary.
+    :param max_length: The maximum length of the summary.
+    :param do_sample: Whether to use sampling for text generation.
+    :param num_beams: Number of beams for beam search (default=4).
+    :return: A summarized string.
+    """
+    summarizer = get_summarizer_pipeline()
+
+    # Provide a prompt or instruction in French
+    prompt_text = f"Résumez ce texte en français :\n\n{raw_text}"
 
     summary = summarizer(
-        raw_text,
+        prompt_text,
         min_length=min_length,
         max_length=max_length,
-        do_sample=do_sample
+        do_sample=do_sample,
+        num_beams=num_beams
     )
-    # The pipeline returns a list of dicts with the key 'summary_text'
     return summary[0]['summary_text']
