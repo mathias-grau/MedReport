@@ -7,7 +7,7 @@ class Config:
 
     # For QA
     QA_MODEL_NAME = "etalab-ia/camembert-base-squadFR-fquad-piaf"  # or environment variable
-    TOKENIZER_NAME = "camembert-base"
+    TOKENIZER_NAME = "etalab-ia/camembert-base-squadFR-fquad-piaf"
 
     # For Summarization
     SUMMARIZATION_MODEL_NAME = "facebook/bart-large-cnn"

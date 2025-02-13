@@ -99,14 +99,22 @@ To test the full pipeline :
 ```bash
 chmod +x pipeline.sh
 ./pipeline.sh
-````
+```
 
+---
+
+### Tests
+
+To test the OCR : 
+```bash
+cat uploads/exemple.pdf | markitdown
+```
 ---
 ### Webapp 
 
 ```bash
 python -m app
-````
+```
 
 
 if everything is working correctly ; 
