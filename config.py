@@ -11,6 +11,7 @@ class Config:
 
     # For Summarization
     SUMMARIZATION_MODEL_NAME = "facebook/bart-large-cnn"
+    # SUMMARIZATION_MODEL_NAME = "meta-llama/Llama-3.2-3B"
 
     # Device for PyTorch
     # In many production setups, you might want to do detection automatically (CPU or GPU).
