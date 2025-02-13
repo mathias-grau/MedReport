@@ -1,12 +1,6 @@
 numpy
-pandas
 scikit-learn
-PyPDF2
 Flask==2.3.3
-pytesseract==0.3.10
-Pillow==9.1.1
-pdfminer.six==20221105
 torch
 transformers
-protobuf
-tiktoken
+markitdown

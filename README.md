@@ -36,14 +36,13 @@ The MedReport pipeline consists of three main stages:
 │   └── README.md         # Documentation for summarization
 │   └── summarize.py      # Code to summarize the text in the PDF file
 └── requirements.txt      # Python dependencies
-└── web_app/
-    ├── app.py             # The Flask application
-    ├── templates/
-    │   ├── index.html
-    │   └── results.html
-    ├── static/
-    │   └── style.css       # (optional)
-    └── uploads/            # Where uploaded files are stored
+├── app.py             # The Flask application
+├── templates/
+│   ├── index.html
+│   └── results.html
+├── static/
+│   └── style.css       # (optional)
+└── uploads/            # Where uploaded files are stored
 ````
 ---
 
@@ -106,7 +105,7 @@ chmod +x pipeline.sh
 ### Webapp 
 
 ```bash
-python -m web_app.app
+python -m app
 ````
 
 

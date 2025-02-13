@@ -1,60 +1,47 @@
-from transformers import pipeline, AutoTokenizer, AutoModelForQuestionAnswering
 import re
+from transformers import pipeline, AutoTokenizer, AutoModelForQuestionAnswering
+from .qa_singleton import get_qa_pipeline
 
-cache_dir = "./"
-# Load a BERT model and tokenizer
-# If we want a English model
-# model_name = "deepset/bert-base-cased-squad2"
-# If we want a French model
-model_name = "etalab-ia/camembert-base-squadFR-fquad-piaf"
-# We use this tokenizer for the French model (for the English model, use "deepset/bert-base-cased-squad2")
-tokenizer_name = "camembert-base"
-tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, cache_dir=cache_dir)
-model = AutoModelForQuestionAnswering.from_pretrained(model_name, cache_dir=cache_dir)
-qa_pipeline = pipeline("question-answering", model=model, tokenizer=tokenizer)
-
-# Get the list of questions for structured fields
-with open('data_parsing/questions.txt', 'r') as file:
-    questions = file.readlines()
-    questions = [line.strip() for line in questions]
-    questions_dict = {}
-    for question in questions:
-        key, value = question.split(':')
-        # remove the leading and trailing whitespaces
-        key = key.strip()
-        value = value.strip()
-        questions_dict[key] = value
-
-# Function to clean the answers
-def clean_answer(answer):
-    # Remove extra spaces and leading/trailing punctuation
+def clean_answer(answer: str) -> str:
+    """
+    Remove extra spaces, punctuation, or known patterns from the QA answer.
+    """
     answer = answer.strip().strip(",.")
-    
-    # Remove prepositions or articles (e.g., "dans le foie" -> "foie")
     answer = re.sub(r"\bdans (le|la|les|l')\b", "", answer, flags=re.IGNORECASE)
+    return answer.strip()
+
+def extract_structured_data(context: str, questions_dict: dict) -> dict:
+    """
+    Use the QA pipeline to extract structured data from text.
+    """
+    qa_pipeline = get_qa_pipeline()
     
-    # # Handle unwanted patterns (e.g., " John Doe," -> "John Doe")
-    # answer = re.sub(r"\b,?\s*", "", answer).strip()
-
-    answer = answer.strip()
-
-    # Add more specific cleaning rules as needed
-    return answer
-
-# Function to extract structured data
-def extract_structured_data(context, questions):
     extracted_data = {}
-    for field, question in questions.items():
+    for field, question in questions_dict.items():
         try:
             result = qa_pipeline(question=question, context=context)
             if result["score"] > 0.5:
                 extracted_data[field] = clean_answer(result["answer"])
             else:
                 extracted_data[field] = "N/A"
-        except Exception as e:
-            extracted_data[field] = "N/A"  # Handle missing information
+        except Exception:
+            extracted_data[field] = "N/A"
     return extracted_data
 
 def parse_raw_text(raw_text: str) -> dict:
+    """
+    Extract structured data from raw text using the QA pipeline.
+    """
+    # Load questions
+    with open('data_parsing/questions.txt', 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        lines = [line.strip() for line in lines]
+        questions_dict = {}
+        for line in lines:
+            key, value = line.split(':')
+            key = key.strip()
+            value = value.strip()
+            questions_dict[key] = value
+
     # Extract structured data
     return extract_structured_data(raw_text, questions_dict)
