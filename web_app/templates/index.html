@@ -1,14 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uploader de Rapport Médical</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Téléversez un Rapport Médical (PDF ou Image)</h1>
+
+    <!-- File Upload Form -->
     <form method="POST" action="/" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".pdf, .png, .jpg, .jpeg" />
+        <input type="file" name="file" accept=".pdf, .png, .jpg, .jpeg" required />
         <button type="submit">Téléverser</button>
     </form>
+
+    <hr>
+
+    <!-- Display Existing Questions -->
+    <h2>Questions d'Extraction Actuelles :</h2>
+    <ul>
+        {% for field, question in questions.items() %}
+            <li><strong>{{ field }}:</strong> {{ question }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Form to Add a New Question -->
+    <h2>Ajouter une Nouvelle Question :</h2>
+    <form method="POST">
+        <input type="text" name="field_name" placeholder="Nom du champ (ex: Diagnostic)" required />
+        <input type="text" name="new_question" placeholder="Question d'extraction" required />
+        <button type="submit">Ajouter</button>
+    </form>
+
 </body>
 </html>
