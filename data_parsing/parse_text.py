@@ -2,17 +2,20 @@ from transformers import pipeline, AutoTokenizer, AutoModelForQuestionAnswering
 import re
 import os
 
-# Load a BERT model and tokenizer
-# If we want a English model
-# If we want a French model
-# model_name = "etalab-ia/camembert-base-squadFR-fquad-piaf"
-# We use this tokenizer for the French model (for the English model, use "deepset/bert-base-cased-squad2")
+cache_dir = "./"
 
-# Load a BERT model and tokenizer
-model_name = "deepset/bert-base-cased-squad2"  # English model
-tokenizer_name = "camembert-base"  # French tokenizer (for French models)
-tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
-model = AutoModelForQuestionAnswering.from_pretrained(model_name)
+# If we want an English model
+# model_name = "deepset/bert-base-cased-squad2"
+
+# If we want a French model
+model_name = "etalab-ia/camembert-base-squadFR-fquad-piaf"
+tokenizer_name = "camembert-base"
+
+# Load the tokenizer and model
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, cache_dir=cache_dir)
+model = AutoModelForQuestionAnswering.from_pretrained(model_name, cache_dir=cache_dir)
+
+# Create the question-answering pipeline
 qa_pipeline = pipeline("question-answering", model=model, tokenizer=tokenizer)
 
 QUESTIONS_FILE = os.path.join(os.path.dirname(__file__), 'questions.txt')

@@ -30,6 +30,7 @@ The MedReport pipeline consists of three main stages:
 ├── data_parsing/         # Parses and extracts structured information
 │   ├── README.md         # Documentation for parsing
 │   ├── __init__.py       # Module initializer
+│   ├── questions.txt     # Questions to get needed information
 │   └── parse_text.py     # Code to parse key entities from raw text
 ├── data_summarization/   # Handles text summarization
 │   └── README.md         # Documentation for summarization
