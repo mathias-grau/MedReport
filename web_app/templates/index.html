@@ -8,30 +8,71 @@
 </head>
 <body>
     <h1>Téléversez un Rapport Médical (PDF ou Image)</h1>
-
-    <!-- File Upload Form -->
+    
     <form method="POST" action="/" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".pdf, .png, .jpg, .jpeg" required />
+        <input type="file" name="file" accept=".pdf, .png, .jpg, .jpeg" />
         <button type="submit">Téléverser</button>
     </form>
 
-    <hr>
-
-    <!-- Display Existing Questions -->
-    <h2>Questions d'Extraction Actuelles :</h2>
-    <ul>
-        {% for field, question in questions.items() %}
-            <li><strong>{{ field }}:</strong> {{ question }}</li>
-        {% endfor %}
-    </ul>
-
-    <!-- Form to Add a New Question -->
-    <h2>Ajouter une Nouvelle Question :</h2>
-    <form method="POST">
-        <input type="text" name="field_name" placeholder="Nom du champ (ex: Diagnostic)" required />
-        <input type="text" name="new_question" placeholder="Question d'extraction" required />
+    <h2>Ajouter une Question</h2>
+    <form method="POST" action="/">
+        <input type="text" name="field_name" placeholder="Nom du champ" required>
+        <input type="text" name="new_question" placeholder="Nouvelle question" required>
         <button type="submit">Ajouter</button>
     </form>
 
+    <h2>Questions Actuelles</h2>
+    <ul id="questions-list"></ul>
+
+    <script>
+        function loadQuestions() {
+            fetch('/questions')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Received questions:", data);  // Debugging
+                    const list = document.getElementById("questions-list");
+                    list.innerHTML = ""; // Clear previous list
+                    
+                    // Check if the data is an object and has entries
+                    if (Object.keys(data).length === 0) {
+                        list.innerHTML = "<li>Aucune question disponible</li>";
+                    } else {
+                        // Iterate over each [key, value] pair in the dictionary
+                        Object.entries(data).forEach(([field, question]) => {
+                            const li = document.createElement("li");
+                            li.textContent = `${field}: ${question}`;
+        
+                            // Add a delete button for each question
+                            const deleteBtn = document.createElement("button");
+                            deleteBtn.textContent = "❌";
+                            deleteBtn.style.marginLeft = "10px";
+                            deleteBtn.onclick = () => deleteQuestion(field, question);
+        
+                            li.appendChild(deleteBtn);
+                            list.appendChild(li);
+                        });
+                    }
+                })
+                .catch(error => console.error("Erreur de chargement des questions:", error));
+        }
+    
+        function deleteQuestion(field, question) {
+            fetch('/delete_question', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ field: field, question: question })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    loadQuestions(); // Refresh the list after deletion
+                }
+            })
+            .catch(error => console.error("Erreur de suppression:", error));
+        }
+    
+        // Ensure questions load when the page loads
+        document.addEventListener("DOMContentLoaded", loadQuestions);
+    </script>    
 </body>
 </html>
