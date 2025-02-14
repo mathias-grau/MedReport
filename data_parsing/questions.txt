@@ -3,4 +3,7 @@ Age du patient: Quel age a le patient?
 Emplacement: Ou est située la tumeur?,
 Longueur de la tumeur: Quelle est la longueur de la tumeur?
 Mucineux: La tumeur est-elle muscineuse?
-T-stage: Quelle est la T-stage de la tumeur?
+T-stage: Quelle est la T-stage de la tumeur?T: Is T here ?
+
+T: Is T here ?
+A: Is A here
