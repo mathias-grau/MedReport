@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from config import Config
 from data_preprocessing.extract_text import extract_text
 from data_parsing.parse_text import parse_raw_text
-from data_summarization.summarize_mistral import summarize_data
+from data_summarization.summarize import summarize_data
 
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # ensures folder exists
