@@ -109,6 +109,11 @@ To test the OCR :
 ```bash
 cat uploads/exemple.pdf | markitdown
 ```
+
+Llama : 
+```bash
+llama model verify-download --model-id Llama3.2-3B
+```
 ---
 ### Webapp 
 
