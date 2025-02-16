@@ -36,14 +36,13 @@ The MedReport pipeline consists of three main stages:
 │   └── README.md         # Documentation for summarization
 │   └── summarize.py      # Code to summarize the text in the PDF file
 └── requirements.txt      # Python dependencies
-└── web_app/
-    ├── app.py             # The Flask application
-    ├── templates/
-    │   ├── index.html
-    │   └── results.html
-    ├── static/
-    │   └── style.css       # (optional)
-    └── uploads/            # Where uploaded files are stored
+├── app.py             # The Flask application
+├── templates/
+│   ├── index.html
+│   └── results.html
+├── static/
+│   └── style.css       # (optional)
+└── uploads/            # Where uploaded files are stored
 ````
 ---
 
@@ -100,14 +99,27 @@ To test the full pipeline :
 ```bash
 chmod +x pipeline.sh
 ./pipeline.sh
-````
+```
 
+---
+
+### Tests
+
+To test the OCR : 
+```bash
+cat uploads/exemple.pdf | markitdown
+```
+
+Llama : 
+```bash
+llama model verify-download --model-id Llama3.2-3B
+```
 ---
 ### Webapp 
 
 ```bash
-python -m web_app.app
-````
+python -m app
+```
 
 
 if everything is working correctly ; 

@@ -103,3 +103,9 @@ models--deepset--bert-base-cased-squad2/
 models--google--flan-t5-large
 models--etalab-ia--camembert-base-squadFR-fquad-piaf
 models--camembert-base
+models--facebook--bart-large-cnn
+models--ministral--Ministral-3b-instruct
+models--meta-llama--Llama-3.2-3B
+
+# folders 
+uploads/
