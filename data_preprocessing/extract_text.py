@@ -1,18 +1,30 @@
-from PyPDF2 import PdfReader
+import os
+from markitdown import MarkItDown
+from PIL import Image
+import pytesseract
 
-def extract_text_from_pdf(pdf_path):
-    reader = PdfReader(pdf_path)
-    number_of_pages = len(reader.pages)
-    page = reader.pages[0]
-    text = page.extract_text()
-    print(f"Extracted text from {number_of_pages} pages.")
-    return text
+def extract_text(file_path):
+    """
+    Use MarkItDown or a fallback. Or detect file type for PDF, PNG, etc.
+    """
+    # If pdf then use MarkItDown:
+    if file_path.endswith('.pdf'):
+        md = MarkItDown()
+        result = md.convert(file_path)
+        return result.text_content
 
+    # If image then use pytesseract:
+    elif file_path.endswith('.png') or file_path.endswith('.jpg') or file_path.endswith('.jpeg'):
+        image = Image.open(file_path)
+        text = pytesseract.image_to_string(image)
+        return text
 
-def extract_text_from_png(png_path):
-    return "Simulated extracted text from png."
+    # If text file then read it:
+    elif file_path.endswith('.txt'):
+        with open(file_path, 'r') as file:
+            return file.read()
 
+    # If none of the above then return None:
+    else:
+        return None
 
-# #### Test the functions
-# preprocessed_text = extract_text_from_pdf("../data/exemple.pdf")
-# print(preprocessed_text)

@@ -1,47 +1,92 @@
 import torch
-from transformers import (
-    AutoModelForSeq2SeqLM,
-    AutoTokenizer,
-    pipeline
-)
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from config import Config
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-cache_dir = "./"
-model_name = "google/flan-t5-large"
+_summarizer_pipeline = None
 
-# Load model and tokenizer
-model = AutoModelForSeq2SeqLM.from_pretrained(model_name, cache_dir=cache_dir).to(device)
-tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
+def get_summarizer_pipeline():
+    global _summarizer_pipeline
+    if _summarizer_pipeline is None:
+        model_path = Config.SUMMARIZATION_MODEL_NAME
 
-# Create summarization pipeline
-summarizer = pipeline(
-    "summarization",
-    model=model,
-    tokenizer=tokenizer,
-    device=0 if device == "cuda" else -1,  # -1 = CPU, 0 = GPU
-)
+        tokenizer = AutoTokenizer.from_pretrained(model_path, cache_dir="./")
+        model = AutoModelForCausalLM.from_pretrained(model_path, cache_dir="./").to(Config.DEVICE)
 
-def summarize_data(raw_text, min_length=30, max_length=100, do_sample=False):
+        # Correction : Ajout de pad_token_id pour éviter les erreurs d'arrêt prématuré
+        tokenizer.pad_token_id = model.config.eos_token_id  
+
+        _summarizer_pipeline = pipeline(
+            "text-generation",
+            model=model,
+            tokenizer=tokenizer,
+            device=0 if Config.DEVICE == "cuda" else -1
+        )
+
+    return _summarizer_pipeline
+
+def summarize_data(raw_text, min_new_tokens=20, max_new_tokens=200, do_sample=False):
     """
-    Summarize the raw text from a medical report into simpler terms for a patient.
-
-    Args:
-        raw_text (str): The medical report text to summarize.
-        min_length (int): Minimum length of the summary.
-        max_length (int): Maximum length of the summary.
-        do_sample (bool): Whether to use sampling; False for deterministic output.
-
-    Returns:
-        str: A summarized version of the input text.
+    Résume un texte médical en français.
     """
-    # Run the text through the summarizer
-    assert isinstance(raw_text, str), "Input to summarizer must be a string."
-
-    summary = summarizer(
-        raw_text,
-        min_length=min_length,
-        max_length=max_length,
-        do_sample=do_sample
+    summarizer = get_summarizer_pipeline()
+    
+    prompt_text = (
+        "Tu es un médecin qui va résumer les résultats d'un patient. "
+        "Lis attentivement le texte suivant et rédige un résumé concis et synthétique en français.\n\n"
+        "Texte à résumer :\n\n"
+        f"{raw_text}\n\n"
+        "Résumé :"  # Marqueur pour extraire le résumé
+        "Ce rapport indique que "
     )
-    # The pipeline returns a list of dicts with the key 'summary_text'
-    return summary[0]['summary_text']
+    
+    # Encodage du texte d'entrée
+    inputs = summarizer.tokenizer(
+        prompt_text, 
+        return_tensors="pt", 
+        truncation=True,  # Ajout de la troncature explicite
+        max_length=2048  # Ajuster selon la capacité du modèle
+    ).to(Config.DEVICE)
+
+
+    if do_sample == True : 
+        output = summarizer.model.generate(
+            **inputs,
+            min_new_tokens=min_new_tokens,
+            max_new_tokens=max_new_tokens,
+            do_sample=True,         # Active l'échantillonnage
+            temperature=0.8,        # Paramètre utilisé en mode sampling
+            top_p=0.95,             # Paramètre utilisé en mode sampling
+            no_repeat_ngram_size=3, # Empêche la répétition de séquences de 3 tokens ou plus
+            repetition_penalty=1.2, # Pénalise la répétition des tokens
+            pad_token_id=summarizer.tokenizer.pad_token_id,
+            eos_token_id=summarizer.tokenizer.eos_token_id,
+            early_stopping=True
+        )
+    else :
+        output = summarizer.model.generate(
+            **inputs,
+            min_new_tokens=min_new_tokens,
+            max_new_tokens=max_new_tokens,
+            do_sample=False,        # Désactive l'échantillonnage
+            num_beams=4,            # Utilisation de la recherche par faisceaux
+            no_repeat_ngram_size=3, # Empêche la répétition de séquences de 3 tokens ou plus
+            repetition_penalty=1.2, # Pénalise la répétition des tokens
+            pad_token_id=summarizer.tokenizer.pad_token_id,
+            eos_token_id=summarizer.tokenizer.eos_token_id,
+            early_stopping=True
+        )
+
+
+
+
+    # Décodage du texte généré
+    generated_text = summarizer.tokenizer.decode(output[0], skip_special_tokens=True)
+
+    # Extraction du résumé après le marqueur "Résumé :"
+    if "Résumé :" in generated_text:
+        summary_text = generated_text.split("Résumé :", 1)[-1].strip()
+    else:
+        summary_text = generated_text.strip()
+
+    print("Résumé généré :", summary_text)  # Affiche le résultat
+    return summary_text
