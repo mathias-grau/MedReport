@@ -7,3 +7,4 @@ T-stage: Quelle est la T-stage de la tumeur?T: Is T here ?
 
 T: Is T here ?
 A: Is A here
+Ethnie: Quelle est l'ethnie du patient ?

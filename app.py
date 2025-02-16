@@ -5,10 +5,14 @@ from werkzeug.utils import secure_filename
 
 from config import Config
 from data_preprocessing.extract_text import extract_text
-from data_parsing.parse_text import parse_raw_text
+from data_parsing.parse_text import parse_raw_text, load_questions
 from data_summarization.summarize import summarize_data
 
-UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
+BASE_DIR = os.path.dirname(__file__)  # MedReport/app.py
+ROOT_DIR = os.path.dirname(BASE_DIR)  # MedReport/
+UPLOAD_FOLDER = os.path.join(ROOT_DIR, 'uploads')
+QUESTIONS_FILE = os.path.join(ROOT_DIR, 'MedReport', 'data_parsing', 'questions.txt')
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # ensures folder exists
 
 app = Flask(__name__)
@@ -20,37 +24,71 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        file = request.files.get('file')
-        if not file:
-            return "No file part."
-        if file.filename == '':
-            return "No selected file."
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
+        # Handle file upload
+        if 'file' in request.files:
+            file = request.files['file']
+            if file and allowed_file(file.filename):
+                filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+                file.save(filename)
 
-            # 1) Extract text
-            raw_text = extract_text(file_path)
+                # Extract raw text
+                raw_text = extract_text(filename)
+                
+                # Parse extracted text
+                parsed_info = parse_raw_text(raw_text)
 
-            # 2) Parse the text
-            parsed_info = parse_raw_text(raw_text)
+                # Summarize text
+                summary = summarize_data(raw_text)
 
-            # 3) Summarize the text
-            summary = summarize_data(raw_text)
+                return render_template('results.html', raw_text=raw_text, parsed=parsed_info, summary=summary)
 
-            # Clear the GPU cache only if needed
-            if Config.DEVICE == "cuda":
-                torch.cuda.empty_cache()
+        # Handle adding new questions dynamically
+        elif 'new_question' in request.form and 'field_name' in request.form:
+            field_name = request.form['field_name'].strip()
+            new_question = request.form['new_question'].strip()
+            
+            if field_name and new_question:
+                with open(QUESTIONS_FILE, 'a', encoding='utf-8') as f:
+                    # Ensure new question starts on a new line
+                    if os.path.getsize(QUESTIONS_FILE) > 0:
+                        f.write("\n")
+                    f.write(f"{field_name}: {new_question}")
 
-            return render_template(
-                'results.html',
-                raw_text=raw_text,
-                parsed=parsed_info,
-                summary=summary
-            )
-    return render_template('index.html')
+            return redirect(url_for('upload_file'))
+
+    # Load current questions dynamically
+    questions = load_questions()
+    return render_template('index.html', questions=questions)
+
+@app.route('/questions', methods=['GET'])
+def get_questions():
+    """Fetch the current questions."""
+    questions = load_questions()
+    print("Questions loaded:", questions)  # Debugging line
+    return jsonify(questions)
+
+@app.route('/delete_question', methods=['POST'])
+def delete_question():
+    data = request.get_json()
+    field = data.get('field')
+    question = data.get('question')
+
+    if field and question:
+        # Load current questions from file
+        questions = load_questions()
+
+        # Remove the question from the dictionary
+        if field in questions and questions[field] == question:
+            del questions[field]
+            
+            # Rewrite the questions to the file
+            with open(QUESTIONS_FILE, 'w', encoding='utf-8') as file:
+                for field, question in questions.items():
+                    file.write(f"{field}: {question}\n")
+            
+            return jsonify({"message": "Question deleted successfully"})
+    
+    return jsonify({"message": "Error deleting question"})
 
 if __name__ == '__main__':
-    # By default, `debug=True` is not recommended in production
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(debug=True)
