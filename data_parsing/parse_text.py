@@ -1,5 +1,7 @@
 import re
 import os
+from transformers import pipeline, AutoTokenizer, AutoModelForQuestionAnswering
+from .qa_singleton import get_qa_pipeline
 
 QUESTIONS_FILE = os.path.join(os.path.dirname(__file__), 'questions.txt')
 
@@ -15,9 +17,6 @@ def load_questions():
                     questions_dict[key.strip()] = value.strip()
     return questions_dict
 
-from transformers import pipeline, AutoTokenizer, AutoModelForQuestionAnswering
-from .qa_singleton import get_qa_pipeline
-
 def clean_answer(answer: str) -> str:
     """
     Remove extra spaces, punctuation, or known patterns from the QA answer.
@@ -26,14 +25,15 @@ def clean_answer(answer: str) -> str:
     answer = re.sub(r"\bdans (le|la|les|l')\b", "", answer, flags=re.IGNORECASE)
     return answer.strip()
 
-def extract_structured_data(context: str, questions_dict: dict) -> dict:
+def extract_structured_data(context):
     """
     Use the QA pipeline to extract structured data from text.
     """
     qa_pipeline = get_qa_pipeline()
+    questions = load_questions()
     
     extracted_data = {}
-    for field, question in questions_dict.items():
+    for field, question in questions.items():
         try:
             result = qa_pipeline(question=question, context=context)
             if result["score"] > 0.5:
