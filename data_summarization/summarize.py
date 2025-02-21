@@ -26,69 +26,73 @@ def get_summarizer_pipeline():
     return _summarizer_pipeline
 
 
-def summarize_data(raw_text, min_new_tokens=20, max_new_tokens=120, do_sample=False):
+def summarize_data(raw_text, 
+                   min_new_tokens=20, 
+                   max_new_tokens=120, 
+                   do_sample=False):
     """
     Résume un texte médical en français.
     """
     summarizer = get_summarizer_pipeline()
     
+    # Construire le prompt au format Instruct
     prompt_text = (
+        "Below is an instruction that describes a task, paired with an input that provides further context.\n"
+        "Write a response that appropriately completes the request.\n\n"
+        "### Instruction:\n"
         "Tu es un médecin qui va résumer les résultats d'un patient. "
-        "Lis attentivement le texte suivant et rédige un résumé concis et synthétique en français.\n\n"
-        "Texte à résumer :\n\n"
+        "Rédige un résumé concis et synthétique en français.\n\n"
+        "### Input:\n"
         f"{raw_text}\n\n"
-        "Résumé :"  # Marqueur pour extraire le résumé
-        "Ce rapport indique que "
+        "### Response:\n"
     )
     
-    # Encodage du texte d'entrée
+    # Préparer les données d'entrée
     inputs = summarizer.tokenizer(
         prompt_text, 
         return_tensors="pt", 
-        truncation=True,  # Ajout de la troncature explicite
-        max_length=2048  # Ajuster selon la capacité du modèle
+        truncation=True,
+        max_length=2048
     ).to(Config.DEVICE)
 
-
-    if do_sample == True : 
+    # Choix des paramètres de génération
+    if do_sample:
         output = summarizer.model.generate(
             **inputs,
             min_new_tokens=min_new_tokens,
             max_new_tokens=max_new_tokens,
-            do_sample=True,         # Active l'échantillonnage
-            temperature=0.8,        # Paramètre utilisé en mode sampling
-            top_p=0.95,             # Paramètre utilisé en mode sampling
-            no_repeat_ngram_size=3, # Empêche la répétition de séquences de 3 tokens ou plus
-            repetition_penalty=1.2, # Pénalise la répétition des tokens
+            do_sample=True,
+            temperature=0.8,
+            top_p=0.95,
+            no_repeat_ngram_size=3,
+            repetition_penalty=1.2,
             pad_token_id=summarizer.tokenizer.pad_token_id,
             eos_token_id=summarizer.tokenizer.eos_token_id,
             early_stopping=True
         )
-    else :
+    else:
         output = summarizer.model.generate(
             **inputs,
             min_new_tokens=min_new_tokens,
             max_new_tokens=max_new_tokens,
-            do_sample=False,        # Désactive l'échantillonnage
-            num_beams=4,            # Utilisation de la recherche par faisceaux
-            no_repeat_ngram_size=3, # Empêche la répétition de séquences de 3 tokens ou plus
-            repetition_penalty=1.2, # Pénalise la répétition des tokens
+            do_sample=False,
+            num_beams=4,
+            no_repeat_ngram_size=3,
+            repetition_penalty=1.2,
             pad_token_id=summarizer.tokenizer.pad_token_id,
             eos_token_id=summarizer.tokenizer.eos_token_id,
             early_stopping=True
         )
 
-
-
-
-    # Décodage du texte généré
+    # Décodage
     generated_text = summarizer.tokenizer.decode(output[0], skip_special_tokens=True)
-
-    # Extraction du résumé après le marqueur "Résumé :"
-    if "Résumé :" in generated_text:
-        summary_text = generated_text.split("Résumé :", 1)[-1].strip()
+    
+    # Extraire la partie après '### Response:'
+    split_marker = "### Response:"
+    if split_marker in generated_text:
+        summary_text = generated_text.split(split_marker, 1)[-1].strip()
     else:
         summary_text = generated_text.strip()
 
-    print("Résumé généré :", summary_text)  # Affiche le résultat
+    print("Résumé généré :", summary_text)
     return summary_text
