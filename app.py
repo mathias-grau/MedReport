@@ -2,7 +2,7 @@ import os
 import torch
 from flask import Flask, request, render_template, redirect, url_for
 from werkzeug.utils import secure_filename
-
+from flask import jsonify
 from config import Config
 from data_preprocessing.extract_text import extract_text
 from data_parsing.parse_text import parse_raw_text, load_questions

@@ -12,8 +12,9 @@ def get_summarizer_pipeline():
         tokenizer = AutoTokenizer.from_pretrained(model_path, cache_dir="./")
         model = AutoModelForCausalLM.from_pretrained(model_path, cache_dir="./").to(Config.DEVICE)
 
-        # Correction : Ajout de pad_token_id pour éviter les erreurs d'arrêt prématuré
-        tokenizer.pad_token_id = model.config.eos_token_id  
+        # Correction: Set pad_token to eos_token, then set pad_token_id
+        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.pad_token_id = tokenizer.eos_token_id
 
         _summarizer_pipeline = pipeline(
             "text-generation",
@@ -24,7 +25,8 @@ def get_summarizer_pipeline():
 
     return _summarizer_pipeline
 
-def summarize_data(raw_text, min_new_tokens=20, max_new_tokens=200, do_sample=False):
+
+def summarize_data(raw_text, min_new_tokens=20, max_new_tokens=120, do_sample=False):
     """
     Résume un texte médical en français.
     """
