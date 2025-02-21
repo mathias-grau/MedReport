@@ -106,6 +106,6 @@ models--camembert-base
 models--facebook--bart-large-cnn
 models--ministral--Ministral-3b-instruct
 models--meta-llama--Llama-3.2-3B
-
+models--meta-llama--Llama-3.2-3B-Instruct
 # folders 
 uploads/
