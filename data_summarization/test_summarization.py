@@ -3,10 +3,10 @@ import sys
 import os
 # nécessaire pour importer les modules de data_preprocessing
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from data_preprocessing.extract_text import extract_text_from_pdf
+from data_preprocessing.extract_text import extract_text
 
 print("Preprocessing text...")
-raw_text = extract_text_from_pdf("./data/exemple.pdf")
+raw_text = extract_text("./data/exemple.pdf")
 print("... text preprocessed successfully.")
 
 from summarize import summarize_data
