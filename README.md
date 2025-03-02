@@ -2,8 +2,8 @@
 
 **MedReport** is an AI-powered application designed to process medical reports in PDF format. The system extracts relevant information, parses key medical details, and generates easy-to-understand summaries for patients. This repository provides a modular and scalable pipeline for handling the entire workflow, from raw data extraction to summarization.
 
-[![Watch the video](https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://github.com/mathias-grau/MedReport/tree/main/data/video/exemple_video_rapport.mov)
-[Watch the video](https://raw.githubusercontent.com/mathias-grau/MedReport/main/data/video/exemple_video_rapport.mov)
+
+![Preview](data/video/gif2.gif)
 
 
 ---
