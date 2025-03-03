@@ -15,7 +15,8 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy the rest of your project files
 COPY . /app/
 
-RUN chmod -R 777 /app
+# Run download_models.py to download the model files
+RUN python download_models.py
 
 # Set Flask environment variables to ensure it runs on the correct host and port
 ENV FLASK_APP=app.py
