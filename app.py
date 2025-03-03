@@ -11,7 +11,13 @@ from data_summarization.summarize import summarize_data
 UPLOAD_FOLDER = os.path.join('/tmp', 'uploads')
 QUESTIONS_FILE = os.path.join(os.path.dirname(__file__), 'MedReport', 'data_parsing', 'questions.txt')
 
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure the folder exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure the folder exists    
+
+hf_userame = os.getenv("HF_USERNAME")
+hf_key = os.getenv("HF_TOKEN")
+
+# Authenticate with the Hugging Face Hub
+os.system(f"transformers-cli login --username {hf_userame} --password {hf_key}")
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
