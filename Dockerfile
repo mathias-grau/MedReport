@@ -5,20 +5,38 @@ FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Set the working directory in the container
+# Set working directory for dependency installation
 WORKDIR /app
 
 # Copy the requirements file and install dependencies
 COPY requirements.txt /app/
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy the rest of your project files
-COPY . /app/
+# Create a non-root user with UID 1000
+RUN useradd -m -u 1000 user
+
+# Set environment variables for the non-root user
+ENV HOME=/home/user
+ENV PATH=$HOME/.local/bin:$PATH
+
+# Switch to non-root user
+USER user
+
+ENV HOME=/home/user \
+	PATH=/home/user/.local/bin:$PATH
+
+# Set working directory in the container for the application
+WORKDIR $HOME/app
+
+# Copy the rest of your project files with proper ownership
+COPY --chown=user . $HOME/app
+
+# (Optional) Create a directory for caching downloaded models (e.g., for Hugging Face)
+RUN mkdir -p $HOME/.cache/huggingface
 
 # Set Flask environment variables to ensure it runs on the correct host and port
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
-# Hugging Face Spaces expects your app to listen on port 7860, so we set it here
 ENV FLASK_RUN_PORT=7860
 
 # Expose the port that your app will run on

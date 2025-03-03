@@ -16,9 +16,7 @@ pinned: false
 
 This is part of the MVA course.
 
-
 ![Preview](data/video/gif2.gif)
-
 
 ---
 
