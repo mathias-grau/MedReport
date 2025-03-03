@@ -97,8 +97,8 @@ pip install -r requirements.txt
 ```
 
 For extraction and summarization, one need to install some models from HuggingFace :
-- etalab-ia/camembert-base-squadFR-fquad-piaf
-- meta-llama/Llama-3.2-3B-Instruct, which as of today need permission to be downloaded
+- `etalab-ia/camembert-base-squadFR-fquad-piaf`
+- `meta-llama/Llama-3.2-3B-Instruct`, which as of today need permission to be downloaded
 
 Here are some advises to be able to run download llama3.2 3B weights from HF : 
 Run : 
@@ -109,9 +109,9 @@ to log in with a new token taken from HF website, or :
 ```bash
 huggingface-cli whoami
 ```
-to check if a token is already saved on your machine. [https://huggingface.co/settings/tokens](Hugging Face Token)
+to check if a token is already saved on your machine. [Hugging Face Token](https://huggingface.co/settings/tokens)
 
-Then one need to apply for permission to download Llama directly on HF website : [https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct](Llama-3.2-3B-Instruct)
+Then one need to apply for permission to download Llama directly on HF website : [Llama-3.2-3B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct)
 
 Then one need to edit the permissions of the token to be able to download llama after getting granted the access
 
