@@ -1,3 +1,15 @@
+---
+title: MedReport  # Change this to your app's name
+emoji: 🚀  # Choose any emoji
+colorFrom: blue  # UI theme color start
+colorTo: green  # UI theme color end
+sdk: flask  # Flask is your framework
+sdk_version: "2.0.3"  # Adjust to the correct version of Flask you're using
+app_file: app.py  # Change if your main file has a different name
+pinned: false
+---
+
+
 # MedReport
 
 **MedReport** is an AI-powered application designed to process medical reports in dfferent formats (pdf, png, jpg, ...). The system extracts relevant information with powerful OCRs, parses key medical details, and generates easy-to-understand summaries for patients. This repository provides a modular and scalable pipeline for handling the entire workflow, from raw data extraction to summarization.
