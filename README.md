@@ -1,6 +1,6 @@
 # MedReport
 
-**MedReport** is an AI-powered application designed to process medical reports in PDF format. The system extracts relevant information, parses key medical details, and generates easy-to-understand summaries for patients. This repository provides a modular and scalable pipeline for handling the entire workflow, from raw data extraction to summarization.
+**MedReport** is an AI-powered application designed to process medical reports in dffernt formats (pdf, png, jpg, ...). The system extracts relevant information with powerful OCRs, parses key medical details, and generates easy-to-understand summaries for patients. This repository provides a modular and scalable pipeline for handling the entire workflow, from raw data extraction to summarization.
 
 
 ![Preview](data/video/gif2.gif)
@@ -12,7 +12,7 @@
 
 The MedReport pipeline consists of three main stages:
 
-1. **Data Preprocessing**: Extracts raw text from PDF files.
+1. **Data Preprocessing**: Extracts raw text from pdf file or images.
 2. **Data Parsing**: Identifies and organizes key information (e.g., patient name, diagnosis, medications).
 3. **Data Summarization**: Simplifies and summarizes the extracted information into patient-friendly language.
 
@@ -25,11 +25,11 @@ The MedReport pipeline consists of three main stages:
 ├── README.md             # Main project documentation
 ├── data/                 # Sample data and documentation
 │   ├── README.md         # Data-specific documentation
-│   └── example.pdf       # Example medical report PDF
-├── data_preprocessing/   # Handles text extraction from PDFs
+│   └── example.pdf       # Example medical report
+├── data_preprocessing/   # Handles text extraction report
 │   ├── README.md         # Documentation for preprocessing
 │   ├── __init__.py       # Module initializer
-│   ├── extract_text.py   # Extracts raw text from PDF files
+│   ├── extract_text.py   # Extracts raw text from report
 │   └── preprocessed_data/ # Directory for storing extracted text
 ├── data_parsing/         # Parses and extracts structured information
 │   ├── README.md         # Documentation for parsing
@@ -38,7 +38,7 @@ The MedReport pipeline consists of three main stages:
 │   └── parse_text.py     # Code to parse key entities from raw text
 ├── data_summarization/   # Handles text summarization
 │   └── README.md         # Documentation for summarization
-│   └── summarize.py      # Code to summarize the text in the PDF file
+│   └── summarize.py      # Code to summarize the text in the report
 └── requirements.txt      # Python dependencies
 ├── app.py                # The Flask application
 ├── templates/
@@ -53,7 +53,7 @@ The MedReport pipeline consists of three main stages:
 ## Pipeline Stages
 1. Data Preprocessing
 
-    - Purpose: Extract raw text from medical reports in PDF format.
+    - Purpose: Extract raw text from medical reports in any format.
 
 2. Data Parsing
 
