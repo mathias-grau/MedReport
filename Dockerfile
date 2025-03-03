@@ -1,20 +1,28 @@
-# Use Python 3.12 as base
+# Use the official Python 3.12 slim image as a base image
 FROM python:3.12-slim
 
-# Set working directory
+# Prevent Python from writing pyc files to disk and enable unbuffered logging
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy all files to the container
-COPY . .
+# Copy the requirements file and install dependencies
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Create uploads directory and set permissions
-RUN mkdir -p /app/uploads && chmod -R 777 /app/uploads
+# Copy the rest of your project files
+COPY . /app/
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Set Flask environment variables to ensure it runs on the correct host and port
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+# Hugging Face Spaces expects your app to listen on port 7860, so we set it here
+ENV FLASK_RUN_PORT=7860
 
-# Expose port (if needed)
+# Expose the port that your app will run on
 EXPOSE 7860
 
-# Run Flask
-CMD ["python", "-m", "app.app"]
+# Start the Flask application
+CMD ["flask", "run"]
