@@ -7,11 +7,11 @@ from data_preprocessing.extract_text import extract_text
 from data_parsing.parse_text import parse_raw_text, load_questions
 from data_summarization.summarize import summarize_data
 
-BASE_DIR = os.path.dirname(__file__)  # Directory of app.py
-UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')  # Creates uploads folder inside BASE_DIR
-QUESTIONS_FILE = os.path.join(BASE_DIR, 'MedReport', 'data_parsing', 'questions.txt')
+# Use a writable directory for uploads in Hugging Face Spaces
+UPLOAD_FOLDER = os.path.join('/tmp', 'uploads')
+QUESTIONS_FILE = os.path.join(os.path.dirname(__file__), 'MedReport', 'data_parsing', 'questions.txt')
 
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensures folder exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure the folder exists
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
