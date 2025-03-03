@@ -1,19 +1,17 @@
 import os
 import torch
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
-from flask import jsonify
 from config import Config
 from data_preprocessing.extract_text import extract_text
 from data_parsing.parse_text import parse_raw_text, load_questions
 from data_summarization.summarize import summarize_data
 
-BASE_DIR = os.path.dirname(__file__)  # MedReport/app.py
-ROOT_DIR = os.path.dirname(BASE_DIR)  # MedReport/
-UPLOAD_FOLDER = os.path.join(ROOT_DIR, 'uploads')
-QUESTIONS_FILE = os.path.join(ROOT_DIR, 'MedReport', 'data_parsing', 'questions.txt')
+BASE_DIR = os.path.dirname(__file__)  # Directory of app.py
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')  # Creates uploads folder inside BASE_DIR
+QUESTIONS_FILE = os.path.join(BASE_DIR, 'MedReport', 'data_parsing', 'questions.txt')
 
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # ensures folder exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensures folder exists
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -28,7 +26,7 @@ def upload_file():
         if 'file' in request.files:
             file = request.files['file']
             if file and allowed_file(file.filename):
-                filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+                filename = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename))
                 file.save(filename)
 
                 # Extract raw text
