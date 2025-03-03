@@ -40,13 +40,13 @@ The MedReport pipeline consists of three main stages:
 │   └── README.md         # Documentation for summarization
 │   └── summarize.py      # Code to summarize the text in the PDF file
 └── requirements.txt      # Python dependencies
-├── app.py             # The Flask application
+├── app.py                # The Flask application
 ├── templates/
 │   ├── index.html
 │   └── results.html
 ├── static/
-│   └── style.css       # (optional)
-└── uploads/            # Where uploaded files are stored
+│   └── style.css         # (optional)
+└── uploads/              # Where uploaded files are stored
 ````
 ---
 
@@ -95,6 +95,30 @@ Run :
 ```bash
 pip install -r requirements.txt
 ```
+
+For extraction and summarization, one need to install some models from HuggingFace :
+- etalab-ia/camembert-base-squadFR-fquad-piaf
+- meta-llama/Llama-3.2-3B-Instruct, which as of today need permission to be downloaded
+
+Here are some advises to be able to run download llama3.2 3B weights from HF : 
+Run : 
+```bash
+huggingface-cli login
+```
+to log in with a new token taken from HF website, or : 
+```bash
+huggingface-cli whoami
+```
+to check if a token is already saved on your machine. [https://huggingface.co/settings/tokens](Hugging Face Token)
+
+Then one need to apply for permission to download Llama directly on HF website : [https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct](Llama-3.2-3B-Instruct)
+
+Then one need to edit the permissions of the token to be able to download llama after getting granted the access
+
+- Select `Repositories permissions` and search for `meta-llama/Llama-3.2-3B-Instruct` repository.
+
+Then you should be able to download the model.
+
 ---
 
 ## Pipeline 
