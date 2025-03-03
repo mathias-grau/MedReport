@@ -95,29 +95,39 @@ Run :
 ```bash
 pip install -r requirements.txt
 ```
+---
 
-For extraction and summarization, one need to install some models from HuggingFace :
-- `etalab-ia/camembert-base-squadFR-fquad-piaf`
-- `meta-llama/Llama-3.2-3B-Instruct`, which as of today need permission to be downloaded
+### Extraction and Summarization Models from Hugging Face
 
-Here are some advises to be able to run download llama3.2 3B weights from HF : 
-Run : 
+To perform extraction and summarization, you need to install the following models from Hugging Face:
+
+- [`etalab-ia/camembert-base-squadFR-fquad-piaf`](https://huggingface.co/etalab-ia/camembert-base-squadFR-fquad-piaf)
+- [`meta-llama/Llama-3.2-3B-Instruct`](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct), which requires special permission for download.
+
+#### 1. Authenticate with Hugging Face
+Run the following command to log in with a new token from the Hugging Face website:
+
 ```bash
 huggingface-cli login
+
 ```
-to log in with a new token taken from HF website, or : 
+Alternatively, check if a token is already saved on your machine:
+
 ```bash
 huggingface-cli whoami
 ```
-to check if a token is already saved on your machine. [Hugging Face Token](https://huggingface.co/settings/tokens)
+You can manage your Hugging Face tokens here : [Hugging Face Token](https://huggingface.co/settings/tokens)
 
-Then one need to apply for permission to download Llama directly on HF website : [Llama-3.2-3B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct)
 
-Then one need to edit the permissions of the token to be able to download llama after getting granted the access
+#### Request Access to Llama-3.2-3B
+You must apply for permission to download the model directly on Hugging Face: [Llama-3.2-3B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct)
 
-- Select `Repositories permissions` and search for `meta-llama/Llama-3.2-3B-Instruct` repository.
+#### Update Token Permissions
+Once access is granted, update your token permissions:
+- Go to Repositories permissions in your Hugging Face settings
+- Search for `meta-llama/Llama-3.2-3B-Instruct` and grant the necessary permissions.
 
-Then you should be able to download the model.
+After completing these steps, you should be able to download and use the model.
 
 ---
 
