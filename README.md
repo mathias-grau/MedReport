@@ -1,6 +1,6 @@
 # MedReport
 
-**MedReport** is an AI-powered application designed to process medical reports in dffernt formats (pdf, png, jpg, ...). The system extracts relevant information with powerful OCRs, parses key medical details, and generates easy-to-understand summaries for patients. This repository provides a modular and scalable pipeline for handling the entire workflow, from raw data extraction to summarization.
+**MedReport** is an AI-powered application designed to process medical reports in dfferent formats (pdf, png, jpg, ...). The system extracts relevant information with powerful OCRs, parses key medical details, and generates easy-to-understand summaries for patients. This repository provides a modular and scalable pipeline for handling the entire workflow, from raw data extraction to summarization.
 
 
 ![Preview](data/video/gif2.gif)
