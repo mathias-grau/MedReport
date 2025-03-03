@@ -28,8 +28,11 @@ ENV HOME=/home/user \
 # Set working directory in the container for the application
 WORKDIR $HOME/app
 
-# Copy the rest of your project files with proper ownership
-COPY --chown=user . $HOME/app
+# Create the MedReport directory inside the container
+RUN mkdir -p $HOME/app/MedReport
+
+# Copy the project into the MedReport folder
+COPY --chown=user . $HOME/app/MedReport
 
 # (Optional) Create a directory for caching downloaded models (e.g., for Hugging Face)
 RUN mkdir -p $HOME/.cache/huggingface
