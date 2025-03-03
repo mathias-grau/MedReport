@@ -15,6 +15,8 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy the rest of your project files
 COPY . /app/
 
+RUN chmod -R 777 /app
+
 # Set Flask environment variables to ensure it runs on the correct host and port
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
