@@ -3,7 +3,7 @@ title: MedReport  # Change this to your app's name
 emoji: 🚀  # Choose any emoji
 colorFrom: blue  # UI theme color start
 colorTo: green  # UI theme color end
-sdk: flask  # Flask is your framework
+sdk: docker  # Flask is your framework
 sdk_version: "2.0.3"  # Adjust to the correct version of Flask you're using
 app_file: app.py  # Change if your main file has a different name
 pinned: false
